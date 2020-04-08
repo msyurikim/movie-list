@@ -3,6 +3,7 @@ import React from 'react';
 import MovieList from './MovieList.jsx';
 import exampleMovies from '../data/exampleMovies.js';
 import Search from './Search.jsx';
+import AddMovie from './AddMovie.jsx';
 
 //originally const
 class App extends React.Component {
@@ -10,7 +11,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      movies: exampleMovies
+      //movies: exampleMovies
+      movies: []
     };
   }
 
@@ -34,10 +36,19 @@ class App extends React.Component {
     });
   }
 
+  addMovie(movie) {
+    var movies = this.state.movies;
+    movies.push(movie);
+    this.setState({
+      movies: movies
+    });
+  }
+
   render() {
     return (
       <div>
         <h1>I Like Movies</h1>
+        <AddMovie addMovie= {this.addMovie.bind(this)} />
         {/* prop drill with method */}
         <Search getSearchResults= {this.getSearchResults.bind(this)} />
         <MovieList movies= {this.state.movies} />
