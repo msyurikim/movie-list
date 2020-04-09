@@ -12,7 +12,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       //movies: exampleMovies
-      movies: []
+      movies: [],
+      searchResults: []
     };
   }
 
@@ -23,11 +24,12 @@ class App extends React.Component {
       window.alert('No movie found!');
     } else {
       this.setState({
-        movies: results
+        searchResults: results
       });
     }
   }
 
+  //move this to Search
   filterResults(query, movies) {
     return movies.filter((movie) => {
       var movieCopy = movie.title.toLowerCase();
@@ -45,13 +47,19 @@ class App extends React.Component {
   }
 
   render() {
+    var movies;
+    if (this.state.searchResults.length === 0) {
+      movies = this.state.movies;
+    } else {
+      movies = this.state.searchResults;
+    }
     return (
       <div>
         <h1>I Like Movies</h1>
         <AddMovie addMovie= {this.addMovie.bind(this)} />
         {/* prop drill with method */}
         <Search getSearchResults= {this.getSearchResults.bind(this)} />
-        <MovieList movies= {this.state.movies} />
+        <MovieList movies= {movies} />
       </div>
     );
   }

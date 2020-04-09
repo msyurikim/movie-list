@@ -5,7 +5,10 @@ var MovieList = ({movies}) => {
   return (
     <ul>
       {movies.map( (movie) =>
-        <li>{movie.title}</li>
+        <li>
+          {movie.title}
+          <button></button>
+        </li>
       )}
     </ul>
   );
