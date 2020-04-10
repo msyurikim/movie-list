@@ -1,12 +1,15 @@
 import React from 'react';
 //import Button from 'react-bootstrap/Button';
+import searchTMDB from './searchTMDB.js';
+import Panel from './Panel.jsx';
 
 class MovieListEntry extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      watched: false
+      watched: false,
+      movie: this.props.movie
     };
   }
 
@@ -18,18 +21,43 @@ class MovieListEntry extends React.Component {
     );
   }
 
-  handleTitleClick() {
+  // handleTitleClick() {
+      //hide movie info if not clicked
+  // }
+  //called automatically
+  componentDidMount() {
+    searchTMDB(this.state.movie.title, this.updateMovieInfo.bind(this));
+  }
 
+  updateMovieInfo(data) { //movie object
+    //var movieCopy = Object.assign({}, this.state.movie);
+    var movieCopy = this.state.movie;
+    movieCopy.Year = data.release_date.slice(0, 4); //just get the year
+    //can't find Runtime, Metascore
+    movieCopy.imdbRating = data.vote_average;
+    // Watched
+    movieCopy.imgURL = `https://image.tmdb.org/t/p/w92${data.poster_path}`;
+    this.setState({
+      movie: movieCopy
+    });
+    console.log(movieCopy);
   }
 
   render() {
-    return(
-      <li>
-        {/* onClick= {} */}
-        <p onClick= {this.handleTitleClick}>{this.props.movie.title}</p>
-        <button onClick={() => this.handleButtonClick(this.props.movie)}>Watched</button>
-      </li>
-    );
+    if (!this.state.movie.hasOwnProperty('Year')) {
+      return <li></li>
+    } else {
+      return(
+        <li>
+          <p onClick= {this.handleTitleClick}>{this.state.movie.title}</p>
+          <ul>
+            <Panel movie= {this.state.movie} />
+            {/* button won't show up inside panel? */}
+            <button onClick={() => this.handleButtonClick(this.props.movie)}>Watched</button>
+          </ul>
+        </li>
+      );
+    }
   }
 }
 
